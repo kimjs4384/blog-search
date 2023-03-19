@@ -1,0 +1,4 @@
+api:
+  kakao:
+    base-url: https://dapi.kakao.com/v2/search/blog
+    auth-key: KakaoAK 6c2966d258c846c86b92773504c4136d

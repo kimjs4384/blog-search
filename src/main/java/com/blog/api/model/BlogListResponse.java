@@ -10,9 +10,12 @@ import lombok.Setter;
 public class BlogListResponse {
 
     private List<Blog> blogs;
+    private boolean hasNext;
 
-    public BlogListResponse(List<Blog> blogs) {
+    public BlogListResponse() {};
+
+    public BlogListResponse(List<Blog> blogs, boolean hasNext) {
         this.blogs = blogs;
+        this.hasNext = hasNext;
     }
-
 }

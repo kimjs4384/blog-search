@@ -36,9 +36,11 @@ public class BlogService {
     private String authKey;
 
     private final ObjectMapper objectMapper;
+    private final KeywordService keywordService;
 
-    public BlogService(ObjectMapper objectMapper) {
+    public BlogService(ObjectMapper objectMapper, KeywordService keywordService) {
         this.objectMapper = objectMapper;
+        this.keywordService = keywordService;
     }
 
     public BlogListResponse retrieveBlogs(String keyword, EBlogSort sort, int page, int size) {
@@ -77,6 +79,8 @@ public class BlogService {
             // TOOD api base url 설정 오류 
             e.printStackTrace();
         }
+
+        keywordService.countKeyword(keyword);
 
         return new BlogListResponse(resultList, hasNext);
     }

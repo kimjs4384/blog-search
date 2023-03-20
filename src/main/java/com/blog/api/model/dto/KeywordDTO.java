@@ -1,4 +1,4 @@
-package com.blog.api.model;
+package com.blog.api.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.api.exceptions.NotSupportEnumException;
-import com.blog.api.model.BlogListResponse;
-import com.blog.api.model.EBlogSort;
+import com.blog.api.model.dto.BlogListResponse;
+import com.blog.api.model.enums.EBlogSort;
 import com.blog.api.service.BlogService;
 
 @RestController

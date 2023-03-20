@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.blog.api.model.KeywordDTO;
-import com.blog.api.model.KeywordResponse;
+import com.blog.api.model.dto.KeywordDTO;
+import com.blog.api.model.dto.KeywordResponse;
 import com.blog.api.service.KeywordService;
 
 @RestController

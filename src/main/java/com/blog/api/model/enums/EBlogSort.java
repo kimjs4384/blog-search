@@ -1,4 +1,4 @@
-package com.blog.api.model;
+package com.blog.api.model.enums;
 
 import lombok.Getter;
 

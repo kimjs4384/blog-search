@@ -8,8 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.blog.api.model.KeywordDTO;
 import com.blog.api.model.KeywordEntity;
+import com.blog.api.model.dto.KeywordDTO;
 import com.blog.api.repository.KeywordJPARepository;
 
 @Service

@@ -1,6 +1,8 @@
-package com.blog.api.model;
+package com.blog.api.model.dto;
 
 import java.util.List;
+
+import com.blog.api.model.Blog;
 
 import lombok.Getter;
 import lombok.Setter;

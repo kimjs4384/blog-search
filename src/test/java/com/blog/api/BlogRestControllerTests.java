@@ -15,9 +15,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.blog.api.model.BlogListResponse;
-import com.blog.api.model.EBlogSort;
-import com.blog.api.model.ExceptionResponse;
+import com.blog.api.model.dto.BlogListResponse;
+import com.blog.api.model.dto.ExceptionResponse;
+import com.blog.api.model.enums.EBlogSort;
 import com.blog.api.repository.KeywordJPARepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -17,8 +17,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.blog.api.model.KeywordDTO;
-import com.blog.api.model.KeywordResponse;
+import com.blog.api.model.dto.KeywordDTO;
+import com.blog.api.model.dto.KeywordResponse;
 import com.blog.api.repository.KeywordJPARepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

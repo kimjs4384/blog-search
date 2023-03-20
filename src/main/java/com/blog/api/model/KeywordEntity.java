@@ -24,11 +24,12 @@ public class KeywordEntity {
     private Long seq;
     
     @Column(unique = true, nullable = false)
+    @Getter
     private String keyword;
 
     @Column
     @ColumnDefault("1")
     @Getter
     @Setter
-    private Integer searchCount = 1;
+    private int searchCount = 1;
 }

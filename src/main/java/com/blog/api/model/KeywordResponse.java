@@ -16,6 +16,8 @@ public class KeywordResponse {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private LocalDateTime timestamp;
 
+    public KeywordResponse() {}
+
     public KeywordResponse(List<KeywordDTO> keywords) {
         this.keywords = keywords;
         this.timestamp = LocalDateTime.now();

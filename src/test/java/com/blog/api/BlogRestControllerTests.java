@@ -13,22 +13,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.blog.api.model.BlogListResponse;
 import com.blog.api.model.EBlogSort;
 import com.blog.api.model.ExceptionResponse;
+import com.blog.api.repository.KeywordJPARepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test-blog")
 public class BlogRestControllerTests {
 
     @LocalServerPort
     int port;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    KeywordJPARepository keywordRepository;
 
     /**
      * 블로그 keyword 검색
@@ -52,6 +57,7 @@ public class BlogRestControllerTests {
 
         assertThat(blogListResponse.getBlogs().size()).isGreaterThan(1);
         assertThat(blogListResponse.getBlogs().size()).isLessThanOrEqualTo(10);
+        assertThat(keywordRepository.findByKeyword(keyword).isPresent()).isEqualTo(true);
     }
 
     /**

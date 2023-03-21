@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.blog.api.model.dto.BlogListResponse;
 import com.blog.api.model.dto.ExceptionResponse;
+import com.blog.api.model.dto.ProviderResponse;
+import com.blog.api.model.enums.EAPIProvider;
 import com.blog.api.model.enums.EBlogSort;
 import com.blog.api.repository.KeywordJPARepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -382,5 +385,30 @@ public class BlogRestControllerTests {
         assertThat(exceptionResponse.getMessage()).isEqualTo("Requested param is not valid.");
         assertThat(exceptionResponse.getDetails().size()).isEqualTo(1);
         assertThat(exceptionResponse.getDetails().get(0)).contains("Maximum size is 50");
+    }
+
+    /**
+     * API 제공자 조회
+     * status code : 200
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    @Test
+    void testGetCurrentProvider() throws IOException, InterruptedException, URISyntaxException {
+        String url = String.format("http://localhost:%d/blogs/provider", this.port);
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client.send(
+            HttpRequest.newBuilder(new URI(url)).build(),
+            HttpResponse.BodyHandlers.ofString()
+        );
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        ProviderResponse providerResponse = objectMapper.readValue(response.body(), new TypeReference<>() {});
+
+        assertThat(providerResponse.getCurrentProvider()).isIn(Arrays.asList(EAPIProvider.values()));
     }
 }

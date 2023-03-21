@@ -14,6 +14,8 @@ public class ProviderResponse {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private LocalDateTime timestamp;
 
+    public ProviderResponse() {}
+
     public ProviderResponse(EAPIProvider currentProvider) {
         this.currentProvider = currentProvider;
         timestamp = LocalDateTime.now();

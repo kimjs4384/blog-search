@@ -3,6 +3,7 @@ package com.blog.api.service;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 
@@ -34,7 +35,7 @@ public class BlogService {
         BlogListResponse blogListResponse = null;
         try {
             HttpResponse<String> response = client.send(
-                externalAPIService.createHttpRequest(keyword, sort, page, size),
+                externalAPIService.createHttpRequest(URLEncoder.encode(keyword, "UTF-8"), sort, page, size),
                 HttpResponse.BodyHandlers.ofString()
             );
             int statusCode = response.statusCode();

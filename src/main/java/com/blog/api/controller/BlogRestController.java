@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.api.exceptions.NotSupportEnumException;
 import com.blog.api.model.dto.BlogListResponse;
+import com.blog.api.model.dto.ProviderResponse;
 import com.blog.api.model.enums.EBlogSort;
 import com.blog.api.service.BlogService;
 
@@ -49,5 +50,9 @@ public class BlogRestController {
         return ResponseEntity.ok().body(response);
     }
 
-
+    @GetMapping("/provider")
+    public ResponseEntity<ProviderResponse> getCurrentProvider() {
+        return ResponseEntity.ok().body(new ProviderResponse(blogService.getCurrentAPIProvider()));
+    }
+    
 }

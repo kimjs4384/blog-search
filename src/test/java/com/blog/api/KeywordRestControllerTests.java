@@ -54,8 +54,9 @@ public class KeywordRestControllerTests {
                     HttpRequest.newBuilder(new URI(url)).build(),
                     HttpResponse.BodyHandlers.ofString()
                 );
-    
+                
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+                Thread.sleep(50);
             }
         }
 

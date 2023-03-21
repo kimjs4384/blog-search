@@ -1,14 +1,16 @@
 package com.blog.api.service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 
 import com.blog.api.model.Blog;
 import com.blog.api.model.dto.BlogListResponse;
@@ -21,28 +23,42 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
-@Service
-@ConditionalOnMissingBean(name =  "kakaoAPIService")
+@Slf4j
 public class NaverAPIService implements ExternalAPIService {
-
+    
     @Getter
-    @Value("${api.naver.base-url}")
-    private String baseUrl;
-    @Value("${api.naver.client-id}")
-    private String clientId;
-    @Value("${api.naver.client-secret}")
-    private String clientSecret;
+    private final String baseUrl;
+    private final String clientId;
+    private final String clientSecret;
 
     private final ObjectMapper objectMapper;
 
-    public NaverAPIService(ObjectMapper objectMapper) {
+    public NaverAPIService(String baseUrl, String clientId, String clientSecret, ObjectMapper objectMapper) {
+        this.baseUrl = baseUrl;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public boolean checkServer() {
-        return true;
+        boolean result = false;
+
+        HttpClient client = HttpClient.newHttpClient();
+        try {
+            HttpResponse<String> response = client.send(
+                createHttpRequest(URLEncoder.encode("상태", "UTF-8"), EBlogSort.ACCURACY, 1, 1),
+                HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() == HttpStatus.OK.value()) result = true;
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            log.warn("Fail to connect server", e);
+        }
+
+        return result;
     }
 
     @Override

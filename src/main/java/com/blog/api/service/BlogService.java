@@ -1,7 +1,6 @@
 package com.blog.api.service;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -12,24 +11,32 @@ import org.springframework.stereotype.Service;
 
 import com.blog.api.exceptions.APIServerException;
 import com.blog.api.model.dto.BlogListResponse;
+import com.blog.api.model.enums.EAPIProvider;
 import com.blog.api.model.enums.EBlogSort;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class BlogService {
 
-    private final ExternalAPIService externalAPIService;
+    @Getter
+    private EAPIProvider currentAPIProvider = EAPIProvider.KAKAO;
+
+    private final APIFactory apiFactory;
     private final KeywordService keywordService;
 
-    public BlogService(ExternalAPIService externalAPIService, KeywordService keywordService) {
-        this.externalAPIService = externalAPIService;
+    private ExternalAPIService externalAPIService;
+
+    public BlogService(APIFactory apiFactory, KeywordService keywordService) {
+        this.apiFactory = apiFactory;
         this.keywordService = keywordService;
     }
 
     public BlogListResponse retrieveBlogs(String keyword, EBlogSort sort, int page, int size) {
+        if (externalAPIService == null) setExternalAPIService();
+
         HttpClient client = HttpClient.newHttpClient();
         
         BlogListResponse blogListResponse = null;
@@ -42,28 +49,32 @@ public class BlogService {
             if (statusCode == HttpStatus.OK.value()) {
                 blogListResponse = externalAPIService.parseResponse(response.body());
                 if (page == 50) blogListResponse.setHasNext(false);
-            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value() | statusCode == HttpStatus.SERVICE_UNAVAILABLE.value()) {
-                throw new APIServerException(String.format("API Server(%s) is not working.", externalAPIService.getBaseUrl()));
-            } else if (statusCode >= 400 && statusCode <= 499) {
 
+                keywordService.countKeyword(keyword);
+            } else {
+                externalAPIService = null;
+                retrieveBlogs(keyword, sort, page, size);
             }
-        } catch (ConnectException e) {
-            log.warn("API server internal error.", e);
-            throw new APIServerException(String.format("Fail to connect API Server(%s)", externalAPIService.getBaseUrl()));
-        } catch (JsonProcessingException e) {
-            // 응답 파싱 오류 
-            e.printStackTrace();
-        } catch (IOException | InterruptedException e) {
-            // send() 오휴
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            // TOOD api base url 설정 오류 
-            e.printStackTrace();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            log.warn("", e);
+            externalAPIService = null;
+            retrieveBlogs(keyword, sort, page, size);
         }
-
-        keywordService.countKeyword(keyword);
 
         return blogListResponse;
     }
 
+    private void setExternalAPIService() {
+        for (EAPIProvider provider: EAPIProvider.values()) {
+            externalAPIService = apiFactory.getAPIService(provider);
+            if (externalAPIService != null) {
+                currentAPIProvider = provider;
+                break;
+            }
+        }
+
+        if (externalAPIService == null) {
+            throw new APIServerException("All api server is not working.");
+        }
+    }
 }

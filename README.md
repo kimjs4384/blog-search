@@ -70,7 +70,7 @@ java -jar blog-search-1.0.0-RELEASE.jar
 
 ## Request  
 
-### URL : /keywoads
+### URL : /keywords
 
 ## Response   
 

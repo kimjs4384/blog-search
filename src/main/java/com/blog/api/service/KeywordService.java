@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +24,22 @@ public class KeywordService {
         this.keywordRepository = keywordRepository;
     }
 
+    @Async
+    public void asyncCountKeyword(String keyword) {
+        countKeyword(keyword);
+    }
+
     @Transactional
     public KeywordEntity countKeyword(String keyword) {
         Optional<KeywordEntity> result = keywordRepository.findByKeyword(keyword);
         KeywordEntity entity;
         if (result.isEmpty()) {
             entity = new KeywordEntity(keyword);
-            keywordRepository.save(entity);
         } else {
             entity = result.get();
             entity.setSearchCount(entity.getSearchCount() + 1);
         }
+        keywordRepository.save(entity);
         return entity;
     }
 

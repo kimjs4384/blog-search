@@ -50,7 +50,7 @@ public class BlogService {
                 blogListResponse = externalAPIService.parseResponse(response.body());
                 if (page == 50) blogListResponse.setHasNext(false);
 
-                keywordService.countKeyword(keyword);
+                keywordService.asyncCountKeyword(keyword);
             } else {
                 externalAPIService = null;
                 retrieveBlogs(keyword, sort, page, size);

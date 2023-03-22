@@ -60,6 +60,7 @@ public class BlogRestControllerTests {
 
         assertThat(blogListResponse.getBlogs().size()).isGreaterThan(1);
         assertThat(blogListResponse.getBlogs().size()).isLessThanOrEqualTo(10);
+        Thread.sleep(500);
         assertThat(keywordRepository.findByKeyword(keyword).isPresent()).isEqualTo(true);
     }
 

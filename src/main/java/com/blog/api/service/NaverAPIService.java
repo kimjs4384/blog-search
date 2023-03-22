@@ -75,8 +75,13 @@ public class NaverAPIService implements ExternalAPIService {
     @Override
     public BlogListResponse parseResponse(String response) throws JsonMappingException, JsonProcessingException {
         NaverResponse naverResponse = objectMapper.readValue(response, new TypeReference<>() {});
+        int display = naverResponse.getDisplay();
         List<Item> items = naverResponse.getItems();
         List<Blog> blogs = items.stream().map(item -> item.toBlog()).collect(Collectors.toList());
-        return new BlogListResponse(blogs, true);
+
+        boolean hasNext = true;
+        if (blogs.size() < display) hasNext = false;
+
+        return new BlogListResponse(blogs, hasNext);
     }
 }

@@ -1,4 +1,16 @@
-# 제공 API  
+#  Github    
+- https://github.com/kimjs4384/blog-search   
+   
+# Executable JAR
+- JAVA 11   
+- Default port : 8080   
+- https://github.com/kimjs4384/blog-search/raw/main/blog-search-1.0.0-RELEASE.jar   
+
+```bash  
+java -jar blog-search-1.0.0-RELEASE.jar
+```
+
+# 제공 API 명세 
 
 ## 1. Keyword 블로그 조회  
 - 키워드를 통해서 블로그를 검색하여 제공하는 API   
